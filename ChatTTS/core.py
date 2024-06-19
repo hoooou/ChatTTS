@@ -165,8 +165,9 @@ class Chat:
                 return text
             
         text = [params_infer_code.get('prompt', '') + i for i in text]
-        params_infer_code.pop('prompt', '')
-        result = infer_code(self.pretrain_models, text, **params_infer_code, return_hidden=use_decoder)
+        # params_infer_code.pop('prompt', '')
+        new_params_infer_code = {key: value for key, value in params_infer_code.items() if key != 'prompt'}
+        result = infer_code(self.pretrain_models, text, **new_params_infer_code, return_hidden=use_decoder)
         
         if use_decoder:
             mel_spec = [self.pretrain_models['decoder'](i[None].permute(0,2,1)) for i in result['hiddens']]
